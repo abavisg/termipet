@@ -65,6 +65,19 @@ Effects:
 - Energy -10 (minimum 0)
 - If your pet is too tired (energy <10), they'll refuse to play
 
+### Walk Your Pet
+
+Take your pet for a walk to restore energy and manage potty needs:
+
+```bash
+termipet walk
+```
+
+Effects:
+- Energy +15 (capped at 100)
+- Potty -50 with 80% probability (minimum 0)
+- If potty level >80 before walk, your pet will have an accident (cleanliness -30, happiness -15)
+
 ## Data Storage
 
 Pet data is stored locally at `~/.termipet/pet.json` and persists between sessions.

@@ -53,3 +53,11 @@ Do **not** mirror this content in README.md (user-facing only).
 **Summary:** Implemented `termipet play` command to play with pet, increasing happiness while consuming energy. Playing increases happiness by +15 and decreases energy by -10 (both bounded 0-100). Special handling for tired pets (energy <10) displays "Kylo is too tired to play right now." with no stat changes. Reuses existing `cap_stat()` utility from utils module for boundary enforcement. Displays playful reaction: "🎾 Kylo plays fetch and wags their tail! [Happiness +15, Energy -10]" with green for increases and red for decreases. Changes are persisted automatically to pet.json.
 **Tests:** All green (40/40 passed) - happiness increases, energy decreases, tired pet prevention, stat capping, stat change calculations
 **Suggested commit message:** "feat: add play command to increase happiness and consume energy"
+
+---
+
+**Slice:** 06 – Walk Command
+**Date:** 2025-10-12 17:00 Europe/UK
+**Summary:** Implemented `termipet walk` command to restore energy and manage potty needs with probabilistic behavior. Walking increases energy by +15 (capped at 100) and has 80% chance to reduce potty_level by -50 (min 0). Added accident handling: if potty_level >80 before walk, pet has accident (cleanliness -30, happiness -15). Created `random_bool(probability)` utility function using rand crate for probabilistic pet behaviors. Three message variants based on outcome: normal walk ("🚶 Kylo enjoyed the walk"), potty relief ("🚶 Kylo feels relieved"), or accident ("💩 Kylo had an accident but feels better now"). Changes are persisted automatically to pet.json.
+**Tests:** All green (50/50 passed) - energy increases, potty relief with probability, accident penalties, stat capping, boundary tests (exactly 80 vs >80), random_bool probability distribution (0.0, 0.8, 1.0)
+**Suggested commit message:** "feat: add walk command with energy restoration and probabilistic potty management"
