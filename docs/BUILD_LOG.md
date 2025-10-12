@@ -69,3 +69,11 @@ Do **not** mirror this content in README.md (user-facing only).
 **Summary:** Implemented `termipet train` command to gain XP and level up while managing energy. Training increases XP by +20 and decreases energy by -15 (min 0). When XP reaches or exceeds 100, pet levels up (level +1, XP resets with rollover, happiness +5 bonus). Energy threshold check prevents training when energy <10 ("Kylo is too tired to train right now."). Handles multiple level-ups in single training session (e.g., XP 95→115 becomes Level 2 with XP 15). Two message variants: normal training ("🏋️ Kylo trains hard and gains experience!") or level up ("🏆 Kylo levelled up to Level 2!"). Gracefully handles missing pet with placeholder detection. Changes are persisted automatically to pet.json.
 **Tests:** All green (58/58 passed, run with --test-threads=1) - XP gain and energy cost, single level-up, multiple level-ups in one session, too tired prevention, energy threshold boundaries (exactly 10 vs <10), missing pet handling, state persistence
 **Suggested commit message:** "feat: add train command to gain XP and level up with energy management"
+
+---
+
+**Slice:** 08 – Potty and Clean Commands
+**Date:** 2025-10-12 18:00 Europe/UK
+**Summary:** Implemented `termipet potty` and `termipet clean` commands to manage pet's hygiene and potty needs. Potty command resets potty_level to 0 and increases happiness by +5. If potty_level >80 before action, an accident occurs (cleanliness -30, happiness -15, displays "💩 Kylo had an accident!"). Clean command increases cleanliness by +40 (capped at 100) with different messages for normal cleaning ("🧼 Kylo feels fresh and happy!") vs already spotless ("✨ Kylo is already spotless!"). Both commands follow existing patterns from walk/feed/play commands, use cap_stat() for boundary enforcement, handle missing pet gracefully, and persist changes automatically to pet.json. All stat changes displayed with color-coded output (green for increases, red for decreases).
+**Tests:** All green (68/68 total, 10/10 for slice) - potty resets level and increases happiness, accident triggers at >80 threshold, cleanliness increases and caps at 100, boundary tests (exactly 80 vs 81), missing pet handling
+**Suggested commit message:** "feat: add potty and clean commands for hygiene management"

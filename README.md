@@ -78,6 +78,45 @@ Effects:
 - Potty -50 with 80% probability (minimum 0)
 - If potty level >80 before walk, your pet will have an accident (cleanliness -30, happiness -15)
 
+### Train Your Pet
+
+Train your pet to gain XP and level up:
+
+```bash
+termipet train
+```
+
+Effects:
+- XP +20
+- Energy -15 (minimum 0)
+- Levels up when XP reaches 100 (XP resets to 0)
+- If energy is too low (<15), your pet will be too tired to train
+
+### Help Your Pet Go Potty
+
+Help your pet go potty to reset their potty level:
+
+```bash
+termipet potty
+```
+
+Effects:
+- Potty level resets to 0
+- Happiness +5 (capped at 100)
+- If potty level >80 before action, an accident occurs (cleanliness -30, happiness -15)
+
+### Clean Your Pet
+
+Clean your pet to increase cleanliness:
+
+```bash
+termipet clean
+```
+
+Effects:
+- Cleanliness +40 (capped at 100)
+- Helps maintain your pet's health and happiness
+
 ## Data Storage
 
 Pet data is stored locally at `~/.termipet/pet.json` and persists between sessions.

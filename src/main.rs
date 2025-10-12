@@ -1,5 +1,7 @@
 use clap::{Parser, Subcommand};
-use termipet::{adopt_pet, feed_pet, play_pet, show_status, train_pet, walk_pet};
+use termipet::{
+    adopt_pet, clean_pet, feed_pet, play_pet, potty_pet, show_status, train_pet, walk_pet,
+};
 
 #[derive(Parser)]
 #[command(name = "termipet")]
@@ -31,6 +33,10 @@ enum Commands {
     Walk,
     /// Train your pet to gain XP and level up
     Train,
+    /// Help your pet go potty to reset potty level
+    Potty,
+    /// Clean your pet to increase cleanliness
+    Clean,
 }
 
 fn main() {
@@ -73,6 +79,20 @@ fn main() {
             }
         },
         Commands::Train => match train_pet() {
+            Ok(_) => {}
+            Err(e) => {
+                eprintln!("Error: {}", e);
+                std::process::exit(1);
+            }
+        },
+        Commands::Potty => match potty_pet() {
+            Ok(_) => {}
+            Err(e) => {
+                eprintln!("Error: {}", e);
+                std::process::exit(1);
+            }
+        },
+        Commands::Clean => match clean_pet() {
             Ok(_) => {}
             Err(e) => {
                 eprintln!("Error: {}", e);
