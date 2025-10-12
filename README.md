@@ -184,12 +184,33 @@ Pet data is stored locally at `~/.termipet/pet.json` and persists between sessio
 
 Built with Rust following TDD/BDD practices.
 
-Run tests:
+### Run Tests
+
+**Important:** Due to environment variable race conditions in train command tests, run tests sequentially.
+
+**Easiest way (recommended):**
 ```bash
-cargo test
+# Use the provided test script
+./test.sh              # Run all tests safely
+./test.sh --fast       # Faster (parallel + sequential)
+./test.sh --verbose    # Show test output
+./test.sh --help       # See all options
 ```
 
-Format and lint:
+**Manual cargo commands:**
+```bash
+# Run all tests (recommended)
+cargo test --lib -- --test-threads=1
+
+# Alternative: Run non-train tests in parallel, then train tests
+cargo test --lib -- --skip train
+cargo test train -- --test-threads=1
+```
+
+**Why `--test-threads=1`?** The train command tests modify the global `HOME` environment variable, which causes race conditions when tests run in parallel. Running sequentially ensures each test has exclusive access to the environment.
+
+### Format and Lint
+
 ```bash
 cargo fmt
 cargo clippy

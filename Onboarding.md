@@ -563,25 +563,73 @@ termiPet follows **Test-Driven Development (TDD)** and **Behavior-Driven Develop
 
 ### **Running Tests**
 
+**⚠️ IMPORTANT: Race Condition in Train Tests**
+
+The train command tests modify the global `HOME` environment variable, causing race conditions when tests run in parallel. **Always run tests with `--test-threads=1` to ensure all tests pass.**
+
+**Easiest Method: Use the test script (recommended)**
+
+The project includes a `test.sh` script that handles everything correctly:
+
 ```bash
-# Run all tests
-cargo test
+# Run all tests safely (sequential)
+./test.sh
 
-# Run tests for specific module
-cargo test shell        # Shell tests only
-cargo test feed         # Feed command tests
-cargo test persistence  # Persistence layer tests
-cargo test mood         # Mood calculation tests
+# Run tests with output (for debugging)
+./test.sh --verbose
 
-# Run with output (see println! statements)
-cargo test -- --nocapture
+# Run tests faster (parallel non-train, sequential train)
+./test.sh --fast
 
-# Run tests verbosely
-cargo test -- --test-threads=1 --nocapture
+# See all options
+./test.sh --help
+```
+
+**Manual cargo commands:**
+
+```bash
+# Run all tests (RECOMMENDED - ensures all tests pass)
+cargo test --lib -- --test-threads=1
+
+# Run with output to see println! statements
+cargo test --lib -- --test-threads=1 --nocapture
 
 # Run a specific test
-cargo test test_feed_increases_hunger_and_happiness
+cargo test test_feed_increases_hunger_and_happiness -- --test-threads=1
 ```
+
+**Alternative: Skip train tests for faster parallel execution**
+
+If you're not working on train functionality, you can skip those tests:
+
+```bash
+# Run all non-train tests in parallel (faster)
+cargo test --lib -- --skip train
+
+# Then run train tests separately (sequential)
+cargo test train -- --test-threads=1
+```
+
+**Module-specific tests:**
+
+```bash
+cargo test shell -- --test-threads=1       # Shell tests only
+cargo test feed -- --test-threads=1        # Feed command tests
+cargo test persistence -- --test-threads=1 # Persistence layer tests
+cargo test mood -- --test-threads=1        # Mood calculation tests
+```
+
+**Why `--test-threads=1`?**
+
+The train tests use `unsafe { std::env::set_var("HOME", temp_dir) }` to temporarily change the HOME directory for testing. Environment variables are global to the process, so when tests run in parallel:
+
+1. Test A sets HOME to `/tmp/test-a/`
+2. Test B sets HOME to `/tmp/test-b/`
+3. Test A tries to read from what it thinks is its directory
+4. But HOME now points to Test B's directory
+5. Test A fails to find its pet.json file
+
+Running sequentially ensures each test has exclusive access to the environment.
 
 ### **Test File Locations**
 

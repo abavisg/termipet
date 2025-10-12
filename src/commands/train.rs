@@ -54,6 +54,26 @@ mod tests {
     use std::fs;
     use tempfile::TempDir;
 
+    // ⚠️ IMPORTANT: These tests MUST be run with --test-threads=1
+    //
+    // Why? These tests use `unsafe { std::env::set_var("HOME", ...) }` to temporarily
+    // change the HOME environment variable for testing. Environment variables are global
+    // to the process, so when tests run in parallel, they create race conditions:
+    //
+    // Example race condition:
+    //   1. Test A sets HOME to /tmp/test-a/
+    //   2. Test B sets HOME to /tmp/test-b/ (overwrites Test A's HOME)
+    //   3. Test A calls load_pet() expecting to read from /tmp/test-a/.termipet/pet.json
+    //   4. But HOME is now /tmp/test-b/, so load_pet() looks in wrong directory
+    //   5. Test A fails because it can't find its pet.json file
+    //
+    // Solution: Run tests sequentially to ensure exclusive environment access
+    //   cargo test train -- --test-threads=1
+    //
+    // Or skip train tests when running all tests in parallel:
+    //   cargo test --lib -- --skip train
+    //   cargo test train -- --test-threads=1
+
     // Helper to create a test pet and save it
     fn create_test_pet_file(temp_dir: &TempDir, pet: &Pet) -> std::path::PathBuf {
         // Set HOME to temp dir for load/save operations
