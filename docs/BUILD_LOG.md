@@ -37,3 +37,11 @@ Do **not** mirror this content in README.md (user-facing only).
 **Summary:** Implemented `termipet status` command to display pet's current stats and mood. Stats are color-coded using the `colored` crate (green ≥70, yellow 40-69, red <40). Mood is calculated based on stat thresholds from BEHAVIOURS.md with 6 moods: Happy (🐾), Hungry (🍖), Sleepy (💤), Bored (🎾), Grumpy (😠), Embarrassed (💩). Gracefully handles missing pet file with helpful message. Created mood calculation module with full test coverage.
 **Tests:** All green (25/25 passed) - mood calculations for all 6 moods, color coding boundaries, status display, missing file handling
 **Suggested commit message:** "feat: add status command with mood calculation and color-coded display"
+
+---
+
+**Slice:** 04 – Feed Command
+**Date:** 2025-10-12 16:00 Europe/UK
+**Summary:** Implemented `termipet feed` command to restore pet's hunger and happiness. Feeding increases hunger by +20 and happiness by +10 (both capped at 100). Special handling for full pets (hunger ≥95) displays "Kylo is already full!" message. Created utility module with `cap_stat()` function for boundary enforcement. Displays reaction message following BEHAVIOURS.md format: "🍖 Kylo munches happily! [Hunger +20, Happiness +10]" with color-coded stat changes. Changes are persisted automatically to pet.json.
+**Tests:** All green (35/35 passed) - stat increases, capping at 100, full pet detection, stat change calculations, cap_stat boundary tests
+**Suggested commit message:** "feat: add feed command to restore hunger and happiness"

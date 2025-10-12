@@ -39,6 +39,19 @@ This displays:
 - Current mood with emoji (Happy 🐾, Hungry 🍖, Sleepy 💤, Bored 🎾, Grumpy 😠, Embarrassed 💩)
 - All pet attributes: hunger, happiness, energy, cleanliness, XP, level, and potty level
 
+### Feed Your Pet
+
+Feed your pet to restore hunger and increase happiness:
+
+```bash
+termipet feed
+```
+
+Effects:
+- Hunger +20 (capped at 100)
+- Happiness +10 (capped at 100)
+- If your pet is already full (hunger ≥95), they'll politely decline
+
 ## Data Storage
 
 Pet data is stored locally at `~/.termipet/pet.json` and persists between sessions.

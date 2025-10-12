@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use termipet::{adopt_pet, show_status};
+use termipet::{adopt_pet, feed_pet, show_status};
 
 #[derive(Parser)]
 #[command(name = "termipet")]
@@ -23,6 +23,8 @@ enum Commands {
     },
     /// Check your pet's current status
     Status,
+    /// Feed your pet to restore hunger and happiness
+    Feed,
 }
 
 fn main() {
@@ -37,6 +39,13 @@ fn main() {
             }
         },
         Commands::Status => match show_status() {
+            Ok(_) => {}
+            Err(e) => {
+                eprintln!("Error: {}", e);
+                std::process::exit(1);
+            }
+        },
+        Commands::Feed => match feed_pet() {
             Ok(_) => {}
             Err(e) => {
                 eprintln!("Error: {}", e);
