@@ -117,6 +117,20 @@ Effects:
 - Cleanliness +40 (capped at 100)
 - Helps maintain your pet's health and happiness
 
+### Reset Your Pet
+
+Delete your pet data and start fresh:
+
+```bash
+termipet reset
+```
+
+This command:
+- Prompts for confirmation before deleting
+- Removes `~/.termipet/pet.json` if confirmed
+- Allows you to adopt a new pet afterward
+- Cannot be undone once confirmed
+
 ## Data Storage
 
 Pet data is stored locally at `~/.termipet/pet.json` and persists between sessions.

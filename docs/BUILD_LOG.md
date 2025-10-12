@@ -77,3 +77,11 @@ Do **not** mirror this content in README.md (user-facing only).
 **Summary:** Implemented `termipet potty` and `termipet clean` commands to manage pet's hygiene and potty needs. Potty command resets potty_level to 0 and increases happiness by +5. If potty_level >80 before action, an accident occurs (cleanliness -30, happiness -15, displays "💩 Kylo had an accident!"). Clean command increases cleanliness by +40 (capped at 100) with different messages for normal cleaning ("🧼 Kylo feels fresh and happy!") vs already spotless ("✨ Kylo is already spotless!"). Both commands follow existing patterns from walk/feed/play commands, use cap_stat() for boundary enforcement, handle missing pet gracefully, and persist changes automatically to pet.json. All stat changes displayed with color-coded output (green for increases, red for decreases).
 **Tests:** All green (68/68 total, 10/10 for slice) - potty resets level and increases happiness, accident triggers at >80 threshold, cleanliness increases and caps at 100, boundary tests (exactly 80 vs 81), missing pet handling
 **Suggested commit message:** "feat: add potty and clean commands for hygiene management"
+
+---
+
+**Slice:** 09 – Reset Command
+**Date:** 2025-10-12 18:30 Europe/UK
+**Summary:** Implemented `termipet reset` command to safely delete pet data and start fresh. Command prompts user for confirmation with "Are you sure you want to reset your pet? (y/n)" before deletion. If confirmed (y), deletes `~/.termipet/pet.json` and displays personalized message "🐾 {pet_name} has been released. You can adopt a new pet anytime." If declined (n), prints "Reset cancelled." and exits without changes. Handles missing pet file gracefully with "No pet found to reset." message. Re-prompts on invalid input (not y/n) with "Please type y or n." until valid response received. Implemented separate `confirm_reset()` helper function for testable confirmation logic. Made `get_pet_file_path()` public in persistence module to enable file existence checks.
+**Tests:** All green (72/72 total, 4/4 for slice) - confirms and deletes file, cancels without confirmation, handles invalid input validation, detects missing file gracefully
+**Suggested commit message:** "feat: add reset command to safely delete pet data and start fresh"

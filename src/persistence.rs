@@ -11,7 +11,7 @@ fn get_data_dir() -> io::Result<PathBuf> {
 }
 
 /// Returns the full path to the pet.json file
-fn get_pet_file_path() -> io::Result<PathBuf> {
+pub fn get_pet_file_path() -> io::Result<PathBuf> {
     Ok(get_data_dir()?.join("pet.json"))
 }
 
