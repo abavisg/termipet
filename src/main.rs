@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 use termipet::{
-    adopt_pet, clean_pet, feed_pet, play_pet, potty_pet, reset_pet, show_status, train_pet,
-    walk_pet,
+    adopt_pet, clean_pet, feed_pet, play_pet, potty_pet, reset_pet, run_shell, show_status,
+    train_pet, walk_pet,
 };
 
 #[derive(Parser)]
@@ -40,6 +40,8 @@ enum Commands {
     Clean,
     /// Reset your pet and start over
     Reset,
+    /// Enter interactive shell mode
+    Shell,
 }
 
 fn main() {
@@ -103,6 +105,13 @@ fn main() {
             }
         },
         Commands::Reset => match reset_pet() {
+            Ok(_) => {}
+            Err(e) => {
+                eprintln!("Error: {}", e);
+                std::process::exit(1);
+            }
+        },
+        Commands::Shell => match run_shell() {
             Ok(_) => {}
             Err(e) => {
                 eprintln!("Error: {}", e);

@@ -131,6 +131,51 @@ This command:
 - Allows you to adopt a new pet afterward
 - Cannot be undone once confirmed
 
+### Interactive Shell
+
+Enter an interactive shell mode to care for your pet continuously without retyping commands:
+
+```bash
+termipet shell
+```
+
+Once in the shell, you can use any command with a `/` prefix:
+
+```
+🐾 termiPet> /feed
+🍖 Kylo munches happily! [Hunger +20, Happiness +10]
+
+🐾 termiPet> /play
+🎾 Kylo plays fetch and wags their tail! [Happiness +15, Energy -10]
+
+🐾 termiPet> /status
+=== Kylo the dog ===
+...
+
+🐾 termiPet> /help
+Available Commands:
+  /feed - Feed your pet to restore hunger and happiness
+  /play - Play with your pet to increase happiness
+  /walk - Walk your pet to restore energy and manage potty needs
+  /train - Train your pet to gain XP and level up
+  /status - Check your pet's current status
+  /clean - Clean your pet to increase cleanliness
+  /potty - Help your pet go potty to reset potty level
+  /reset - Reset your pet and start over
+  /help - Display this help message
+  /exit - Exit the shell
+
+🐾 termiPet> /exit
+👋 Goodbye! Your pet will miss you!
+```
+
+Features:
+- All pet care commands work identically to their standalone versions
+- Type `/help` to see available commands
+- Type `/exit` to quit (or press Ctrl+D)
+- Invalid commands display helpful error messages
+- Command input is case-insensitive and whitespace-tolerant
+
 ## Data Storage
 
 Pet data is stored locally at `~/.termipet/pet.json` and persists between sessions.
