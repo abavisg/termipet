@@ -45,3 +45,11 @@ Do **not** mirror this content in README.md (user-facing only).
 **Summary:** Implemented `termipet feed` command to restore pet's hunger and happiness. Feeding increases hunger by +20 and happiness by +10 (both capped at 100). Special handling for full pets (hunger ≥95) displays "Kylo is already full!" message. Created utility module with `cap_stat()` function for boundary enforcement. Displays reaction message following BEHAVIOURS.md format: "🍖 Kylo munches happily! [Hunger +20, Happiness +10]" with color-coded stat changes. Changes are persisted automatically to pet.json.
 **Tests:** All green (35/35 passed) - stat increases, capping at 100, full pet detection, stat change calculations, cap_stat boundary tests
 **Suggested commit message:** "feat: add feed command to restore hunger and happiness"
+
+---
+
+**Slice:** 05 – Play Command
+**Date:** 2025-10-12 16:30 Europe/UK
+**Summary:** Implemented `termipet play` command to play with pet, increasing happiness while consuming energy. Playing increases happiness by +15 and decreases energy by -10 (both bounded 0-100). Special handling for tired pets (energy <10) displays "Kylo is too tired to play right now." with no stat changes. Reuses existing `cap_stat()` utility from utils module for boundary enforcement. Displays playful reaction: "🎾 Kylo plays fetch and wags their tail! [Happiness +15, Energy -10]" with green for increases and red for decreases. Changes are persisted automatically to pet.json.
+**Tests:** All green (40/40 passed) - happiness increases, energy decreases, tired pet prevention, stat capping, stat change calculations
+**Suggested commit message:** "feat: add play command to increase happiness and consume energy"

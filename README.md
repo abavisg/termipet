@@ -52,6 +52,19 @@ Effects:
 - Happiness +10 (capped at 100)
 - If your pet is already full (hunger ≥95), they'll politely decline
 
+### Play with Your Pet
+
+Play with your pet to boost happiness and bond:
+
+```bash
+termipet play
+```
+
+Effects:
+- Happiness +15 (capped at 100)
+- Energy -10 (minimum 0)
+- If your pet is too tired (energy <10), they'll refuse to play
+
 ## Data Storage
 
 Pet data is stored locally at `~/.termipet/pet.json` and persists between sessions.
