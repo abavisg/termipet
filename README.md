@@ -16,7 +16,15 @@ cargo build --release
 
 ## Usage
 
-Coming soon - CLI commands are being implemented incrementally.
+### Adopt a Pet
+
+Start by adopting your first pet:
+
+```bash
+termipet adopt --name Kylo --species dog
+```
+
+This creates a new pet with default stats (hunger: 80, happiness: 80, energy: 80). If you already have a pet, you'll be prompted to confirm before overwriting.
 
 ## Data Storage
 
