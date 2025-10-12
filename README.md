@@ -26,6 +26,19 @@ termipet adopt --name Kylo --species dog
 
 This creates a new pet with default stats (hunger: 80, happiness: 80, energy: 80). If you already have a pet, you'll be prompted to confirm before overwriting.
 
+### Check Pet Status
+
+View your pet's current stats and mood:
+
+```bash
+termipet status
+```
+
+This displays:
+- Color-coded stats (green: good, yellow: warning, red: critical)
+- Current mood with emoji (Happy 🐾, Hungry 🍖, Sleepy 💤, Bored 🎾, Grumpy 😠, Embarrassed 💩)
+- All pet attributes: hunger, happiness, energy, cleanliness, XP, level, and potty level
+
 ## Data Storage
 
 Pet data is stored locally at `~/.termipet/pet.json` and persists between sessions.

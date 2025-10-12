@@ -29,3 +29,11 @@ Do **not** mirror this content in README.md (user-facing only).
 **Summary:** Implemented CLI command `termipet adopt --name <NAME> --species <SPECIES>` to create and save a new pet. The command checks for existing pets and prompts for confirmation before overwriting. Displays friendly welcome message with emoji (🐾 Welcome, Kylo the dog!). Uses clap derive macros for CLI argument parsing.
 **Tests:** All green (10/10 passed) - creates new pet, detects existing pet, handles overwrite confirmation, validates message format
 **Suggested commit message:** "feat: add adopt command to create and name new pet"
+
+---
+
+**Slice:** 03 – Status Command
+**Date:** 2025-10-12 15:30 Europe/UK
+**Summary:** Implemented `termipet status` command to display pet's current stats and mood. Stats are color-coded using the `colored` crate (green ≥70, yellow 40-69, red <40). Mood is calculated based on stat thresholds from BEHAVIOURS.md with 6 moods: Happy (🐾), Hungry (🍖), Sleepy (💤), Bored (🎾), Grumpy (😠), Embarrassed (💩). Gracefully handles missing pet file with helpful message. Created mood calculation module with full test coverage.
+**Tests:** All green (25/25 passed) - mood calculations for all 6 moods, color coding boundaries, status display, missing file handling
+**Suggested commit message:** "feat: add status command with mood calculation and color-coded display"

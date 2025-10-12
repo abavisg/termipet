@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cargo test)",
+      "Bash(cargo build:*)",
+      "Bash(./target/debug/termipet:*)",
+      "Bash(cargo fmt:*)",
+      "Bash(cargo clippy:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
