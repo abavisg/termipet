@@ -61,3 +61,11 @@ Do **not** mirror this content in README.md (user-facing only).
 **Summary:** Implemented `termipet walk` command to restore energy and manage potty needs with probabilistic behavior. Walking increases energy by +15 (capped at 100) and has 80% chance to reduce potty_level by -50 (min 0). Added accident handling: if potty_level >80 before walk, pet has accident (cleanliness -30, happiness -15). Created `random_bool(probability)` utility function using rand crate for probabilistic pet behaviors. Three message variants based on outcome: normal walk ("🚶 Kylo enjoyed the walk"), potty relief ("🚶 Kylo feels relieved"), or accident ("💩 Kylo had an accident but feels better now"). Changes are persisted automatically to pet.json.
 **Tests:** All green (50/50 passed) - energy increases, potty relief with probability, accident penalties, stat capping, boundary tests (exactly 80 vs >80), random_bool probability distribution (0.0, 0.8, 1.0)
 **Suggested commit message:** "feat: add walk command with energy restoration and probabilistic potty management"
+
+---
+
+**Slice:** 07 – Train Command
+**Date:** 2025-10-12 17:30 Europe/UK
+**Summary:** Implemented `termipet train` command to gain XP and level up while managing energy. Training increases XP by +20 and decreases energy by -15 (min 0). When XP reaches or exceeds 100, pet levels up (level +1, XP resets with rollover, happiness +5 bonus). Energy threshold check prevents training when energy <10 ("Kylo is too tired to train right now."). Handles multiple level-ups in single training session (e.g., XP 95→115 becomes Level 2 with XP 15). Two message variants: normal training ("🏋️ Kylo trains hard and gains experience!") or level up ("🏆 Kylo levelled up to Level 2!"). Gracefully handles missing pet with placeholder detection. Changes are persisted automatically to pet.json.
+**Tests:** All green (58/58 passed, run with --test-threads=1) - XP gain and energy cost, single level-up, multiple level-ups in one session, too tired prevention, energy threshold boundaries (exactly 10 vs <10), missing pet handling, state persistence
+**Suggested commit message:** "feat: add train command to gain XP and level up with energy management"

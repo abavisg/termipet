@@ -53,6 +53,25 @@ Do not write code yet — stay in Plan Mode until confirmation.
 
 ---
 
+### 🧹 Context Reset Policy
+
+After each slice is completed and all tests are passing:
+
+1. Update `docs/BUILD_LOG.md` with a summary and commit message.  
+2. Commit your changes (`git add . && git commit -m "feat: complete Slice 0X"`).  
+3. **Reset Claude Code context** to free memory and focus on the next slice.  
+4. Reload project context by running:
+   ```
+   Read claude.md, specs/SLICES/<next_slice>.md,
+   specs/BEHAVIOURS.md, and specs/TEST_GUIDELINES.md.
+   Summarise the slice goal and plan in detail.
+   Do not write code yet — stay in Plan Mode until confirmation.
+   ```
+
+This ensures each slice starts clean, reduces confusion, and keeps Claude Code operating efficiently.
+
+---
+
 ## 🧪 Test-Driven Development Rules
 
 - Always write failing tests before implementation.  

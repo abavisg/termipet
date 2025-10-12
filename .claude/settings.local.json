@@ -5,7 +5,8 @@
       "Bash(cargo build:*)",
       "Bash(./target/debug/termipet:*)",
       "Bash(cargo fmt:*)",
-      "Bash(cargo clippy:*)"
+      "Bash(cargo clippy:*)",
+      "Bash(cargo test train)"
     ],
     "deny": [],
     "ask": []
