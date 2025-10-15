@@ -10,9 +10,35 @@ A virtual pet that lives in your terminal. Care for your pet by feeding, playing
 
 ## Installation
 
+### Build from Source
+
 ```bash
 cargo build --release
 ```
+
+### Install Globally
+
+After building, you can install termipet to run it from anywhere:
+
+**Option 1: Using cargo install (Recommended)**
+
+```bash
+cargo install --path .
+```
+
+This installs termipet to `~/.cargo/bin/` which should already be in your PATH if you have Rust installed.
+
+**Option 2: Manual copy to system PATH**
+
+```bash
+# Copy the binary to /usr/local/bin
+sudo cp ./target/release/termipet /usr/local/bin/
+
+# Make sure it's executable
+sudo chmod +x /usr/local/bin/termipet
+```
+
+After installation, you can run `termipet` from any directory.
 
 ## Usage
 
