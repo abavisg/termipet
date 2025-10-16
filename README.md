@@ -4,9 +4,11 @@ A virtual pet that lives in your terminal. Care for your pet by feeding, playing
 
 ## Features
 
-- Local persistence - your pet data is saved automatically
-- Mood-based interactions - your pet reacts based on its stats
-- Progressive leveling system
+- **Living Pet System** - your pet's stats change over time, even when you're away
+- **Local Persistence** - pet data is saved automatically to your home directory
+- **Mood-based Interactions** - your pet reacts based on its stats with 6 different moods
+- **Progressive Leveling** - train your pet to gain XP and level up
+- **Interactive Shell** - care for your pet continuously in an interactive session
 
 ## Installation
 
@@ -202,9 +204,34 @@ Features:
 - Invalid commands display helpful error messages
 - Command input is case-insensitive and whitespace-tolerant
 
-## Data Storage
+## How It Works
 
-Pet data is stored locally at `~/.termipet/pet.json` and persists between sessions.
+### Living Pet System
+
+Your pet is alive and changes over time! Stats automatically decay based on elapsed time since your last interaction:
+
+**Every 8 hours:**
+- Hunger decreases by 3 points
+- Happiness decreases by 2 points
+- Cleanliness decreases by 2 points
+- Potty level increases by 2 points
+
+**Example:** If you leave your pet for 24 hours (3 intervals):
+- A pet with hunger 100 will drop to 91
+- Happiness will drop from 100 to 94
+- Cleanliness will drop from 100 to 94
+- Potty level will rise from 0 to 6
+
+All stats are bounded between 0-100, so your pet won't drop below zero or exceed maximum values.
+
+**Tip:** Check on your pet regularly to keep them happy and healthy! Use `termipet status` to see how they're doing.
+
+### Data Storage
+
+Pet data is stored locally at `~/.termipet/pet.json` and persists between sessions. The file includes:
+- Pet name and species
+- All stats (hunger, happiness, energy, cleanliness, XP, level, potty level)
+- Last updated timestamp (for decay calculations)
 
 ## Development
 

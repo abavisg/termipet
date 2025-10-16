@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -11,6 +12,7 @@ pub struct Pet {
     pub level: u32,
     pub cleanliness: u8,
     pub potty_level: u8,
+    pub last_updated: DateTime<Utc>,
 }
 
 impl Pet {
@@ -25,6 +27,7 @@ impl Pet {
             level: 1,
             cleanliness: 80,
             potty_level: 0,
+            last_updated: Utc::now(),
         }
     }
 }

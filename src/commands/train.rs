@@ -105,6 +105,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 50,
+            last_updated: chrono::Utc::now(),
         };
         create_test_pet_file(&temp_dir, &pet);
 
@@ -131,6 +132,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 50,
+            last_updated: chrono::Utc::now(),
         };
         create_test_pet_file(&temp_dir, &pet);
 
@@ -159,6 +161,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 50,
+            last_updated: chrono::Utc::now(),
         };
         create_test_pet_file(&temp_dir, &pet);
 
@@ -186,6 +189,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 50,
+            last_updated: chrono::Utc::now(),
         };
         create_test_pet_file(&temp_dir, &pet);
 
@@ -233,6 +237,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 50,
+            last_updated: chrono::Utc::now(),
         };
         create_test_pet_file(&temp_dir, &pet);
 
@@ -259,6 +264,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 50,
+            last_updated: chrono::Utc::now(),
         };
         create_test_pet_file(&temp_dir, &pet);
 
@@ -285,6 +291,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 50,
+            last_updated: chrono::Utc::now(),
         };
         create_test_pet_file(&temp_dir, &pet);
 

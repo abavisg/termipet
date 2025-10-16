@@ -119,6 +119,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 0,
+            last_updated: chrono::Utc::now(),
         };
 
         // When: printing status (we can't easily capture stdout in test,
@@ -142,6 +143,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 0,
+            last_updated: chrono::Utc::now(),
         };
 
         // When: printing status

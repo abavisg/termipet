@@ -83,6 +83,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 0,
+            last_updated: chrono::Utc::now(),
         };
 
         // When: calculating mood
@@ -105,6 +106,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 0,
+            last_updated: chrono::Utc::now(),
         };
 
         // When: calculating mood
@@ -127,6 +129,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 0,
+            last_updated: chrono::Utc::now(),
         };
 
         // When: calculating mood
@@ -149,6 +152,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 0,
+            last_updated: chrono::Utc::now(),
         };
 
         // When: calculating mood
@@ -171,6 +175,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 0,
+            last_updated: chrono::Utc::now(),
         };
 
         // When: calculating mood
@@ -193,6 +198,7 @@ mod tests {
             level: 1,
             cleanliness: 80,
             potty_level: 85,
+            last_updated: chrono::Utc::now(),
         };
 
         // When: calculating mood
