@@ -273,4 +273,45 @@ mod tests {
         assert!(pet.last_updated <= after_call);
         assert!(pet.last_updated > old_timestamp);
     }
+
+    #[test]
+    fn test_load_handles_missing_last_updated_field() {
+        // Given: an old JSON file without last_updated field (backward compatibility)
+        let temp_dir = setup_test_env();
+        let pet_path = get_test_pet_path(&temp_dir);
+
+        // Create JSON manually without last_updated field (simulating old format)
+        let old_json = r#"{
+            "name": "Kylo",
+            "species": "dog",
+            "hunger": 85,
+            "happiness": 90,
+            "energy": 75,
+            "xp": 50,
+            "level": 2,
+            "cleanliness": 80,
+            "potty_level": 10
+        }"#;
+        fs::write(&pet_path, old_json).unwrap();
+
+        // When: loading the pet
+        let contents = fs::read_to_string(&pet_path).unwrap();
+        let pet: Pet = serde_json::from_str(&contents).unwrap();
+
+        // Then: pet should load successfully with default last_updated
+        assert_eq!(pet.name, "Kylo");
+        assert_eq!(pet.species, "dog");
+        assert_eq!(pet.hunger, 85);
+        assert_eq!(pet.happiness, 90);
+        assert_eq!(pet.energy, 75);
+        assert_eq!(pet.xp, 50);
+        assert_eq!(pet.level, 2);
+        assert_eq!(pet.cleanliness, 80);
+        assert_eq!(pet.potty_level, 10);
+
+        // last_updated should be set to current time (within reasonable bounds)
+        let now = Utc::now();
+        let time_diff = (now - pet.last_updated).num_seconds().abs();
+        assert!(time_diff < 5, "last_updated should be close to now");
+    }
 }

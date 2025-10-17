@@ -12,7 +12,13 @@ pub struct Pet {
     pub level: u32,
     pub cleanliness: u8,
     pub potty_level: u8,
+    #[serde(default = "default_last_updated")]
     pub last_updated: DateTime<Utc>,
+}
+
+// Helper function for serde default
+fn default_last_updated() -> DateTime<Utc> {
+    Utc::now()
 }
 
 impl Pet {
