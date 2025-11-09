@@ -19,21 +19,26 @@ pub fn get_pet_file_path() -> io::Result<PathBuf> {
     Ok(get_data_dir()?.join("pet.json"))
 }
 
-/// Applies stat decay based on elapsed 8-hour intervals since last_updated
+/// Applies stat decay based on elapsed hours since last_updated
+/// Decay rates match BEHAVIOURS.md spec: hunger -10/day, happiness -5/day, cleanliness -2/day, potty +5/day
 fn apply_decay(pet: &mut Pet) {
     let now = Utc::now();
     let elapsed = now.signed_duration_since(pet.last_updated);
-    let intervals = elapsed.num_hours() / 8;
+    let hours = elapsed.num_hours();
 
-    // Only apply decay if at least one 8-hour interval has passed
-    if intervals > 0 {
-        // Apply decay for each interval
-        for _ in 0..intervals {
-            pet.hunger = pet.hunger.saturating_sub(3);
-            pet.happiness = pet.happiness.saturating_sub(2);
-            pet.cleanliness = pet.cleanliness.saturating_sub(2);
-            pet.potty_level = (pet.potty_level + 2).min(100);
-        }
+    // Only apply decay if at least one hour has passed
+    if hours > 0 {
+        // Calculate total decay based on hours elapsed and daily rates from spec
+        // Using integer division, decay accumulates naturally over 24 hours
+        let hunger_decay = (hours * 10) / 24;      // -10 per day
+        let happiness_decay = (hours * 5) / 24;    // -5 per day
+        let cleanliness_decay = (hours * 2) / 24;  // -2 per day
+        let potty_increase = (hours * 5) / 24;     // +5 per day
+
+        pet.hunger = pet.hunger.saturating_sub(hunger_decay as u8);
+        pet.happiness = pet.happiness.saturating_sub(happiness_decay as u8);
+        pet.cleanliness = pet.cleanliness.saturating_sub(cleanliness_decay as u8);
+        pet.potty_level = (pet.potty_level + potty_increase as u8).min(100);
 
         // Update the last_updated timestamp
         pet.last_updated = now;
@@ -177,28 +182,48 @@ mod tests {
     }
 
     #[test]
-    fn test_apply_decay_one_interval_passed() {
-        // Given: a pet with full stats, last updated 8 hours ago
+    fn test_apply_decay_after_3_hours() {
+        // Given: a pet with full stats, last updated 3 hours ago
         let mut pet = Pet::new("Kylo".to_string(), "dog".to_string());
         pet.hunger = 100;
         pet.happiness = 100;
         pet.cleanliness = 100;
         pet.potty_level = 0;
-        pet.last_updated = Utc::now() - Duration::hours(8);
+        pet.last_updated = Utc::now() - Duration::hours(3);
 
         // When: apply_decay is called
         apply_decay(&mut pet);
 
-        // Then: stats should decay by one interval
-        assert_eq!(pet.hunger, 97); // 100 - 3
-        assert_eq!(pet.happiness, 98); // 100 - 2
-        assert_eq!(pet.cleanliness, 98); // 100 - 2
-        assert_eq!(pet.potty_level, 2); // 0 + 2
+        // Then: stats should decay based on 3 hours (3*10/24=1, 3*5/24=0, 3*2/24=0, 3*5/24=0)
+        assert_eq!(pet.hunger, 99); // 100 - 1
+        assert_eq!(pet.happiness, 100); // 100 - 0
+        assert_eq!(pet.cleanliness, 100); // 100 - 0
+        assert_eq!(pet.potty_level, 0); // 0 + 0
     }
 
     #[test]
-    fn test_apply_decay_multiple_intervals() {
-        // Given: a pet with full stats, last updated 24 hours ago (3 intervals)
+    fn test_apply_decay_after_5_hours() {
+        // Given: a pet with full stats, last updated 5 hours ago
+        let mut pet = Pet::new("Kylo".to_string(), "dog".to_string());
+        pet.hunger = 100;
+        pet.happiness = 100;
+        pet.cleanliness = 100;
+        pet.potty_level = 0;
+        pet.last_updated = Utc::now() - Duration::hours(5);
+
+        // When: apply_decay is called
+        apply_decay(&mut pet);
+
+        // Then: stats should decay based on 5 hours (5*10/24=2, 5*5/24=1, 5*2/24=0, 5*5/24=1)
+        assert_eq!(pet.hunger, 98); // 100 - 2
+        assert_eq!(pet.happiness, 99); // 100 - 1
+        assert_eq!(pet.cleanliness, 100); // 100 - 0
+        assert_eq!(pet.potty_level, 1); // 0 + 1
+    }
+
+    #[test]
+    fn test_apply_decay_after_full_day() {
+        // Given: a pet with full stats, last updated 24 hours ago (1 full day)
         let mut pet = Pet::new("Kylo".to_string(), "dog".to_string());
         pet.hunger = 100;
         pet.happiness = 100;
@@ -209,11 +234,11 @@ mod tests {
         // When: apply_decay is called
         apply_decay(&mut pet);
 
-        // Then: stats should decay by three intervals
-        assert_eq!(pet.hunger, 91); // 100 - (3 * 3)
-        assert_eq!(pet.happiness, 94); // 100 - (3 * 2)
-        assert_eq!(pet.cleanliness, 94); // 100 - (3 * 2)
-        assert_eq!(pet.potty_level, 6); // 0 + (3 * 2)
+        // Then: stats should match spec rates: hunger -10/day, happiness -5/day, cleanliness -2/day, potty +5/day
+        assert_eq!(pet.hunger, 90); // 100 - 10
+        assert_eq!(pet.happiness, 95); // 100 - 5
+        assert_eq!(pet.cleanliness, 98); // 100 - 2
+        assert_eq!(pet.potty_level, 5); // 0 + 5
     }
 
     #[test]
@@ -230,26 +255,26 @@ mod tests {
         apply_decay(&mut pet);
 
         // Then: stats should be capped at boundaries
-        assert_eq!(pet.hunger, 0); // 5 - 9 = capped at 0
-        assert_eq!(pet.happiness, 0); // 3 - 6 = capped at 0
-        assert_eq!(pet.cleanliness, 0); // 1 - 6 = capped at 0
-        assert_eq!(pet.potty_level, 100); // 97 + 6 = capped at 100
+        assert_eq!(pet.hunger, 0); // 5 - 10 = capped at 0
+        assert_eq!(pet.happiness, 0); // 3 - 5 = capped at 0
+        assert_eq!(pet.cleanliness, 0); // 1 - 2 = capped at 0
+        assert_eq!(pet.potty_level, 100); // 97 + 5 = capped at 100
     }
 
     #[test]
-    fn test_apply_decay_no_change_if_recent() {
-        // Given: a pet last updated 4 hours ago (< 8 hours)
+    fn test_apply_decay_no_change_if_under_threshold() {
+        // Given: a pet last updated less than 1 hour ago
         let mut pet = Pet::new("Kylo".to_string(), "dog".to_string());
         pet.hunger = 100;
         pet.happiness = 100;
         pet.cleanliness = 100;
         pet.potty_level = 0;
-        pet.last_updated = Utc::now() - Duration::hours(4);
+        pet.last_updated = Utc::now() - Duration::minutes(30);
 
         // When: apply_decay is called
         apply_decay(&mut pet);
 
-        // Then: stats should remain unchanged (0 intervals)
+        // Then: stats should remain unchanged (0 hours elapsed)
         assert_eq!(pet.hunger, 100);
         assert_eq!(pet.happiness, 100);
         assert_eq!(pet.cleanliness, 100);
@@ -258,9 +283,9 @@ mod tests {
 
     #[test]
     fn test_apply_decay_updates_last_updated() {
-        // Given: a pet with old last_updated timestamp
+        // Given: a pet with old last_updated timestamp (5 hours ago)
         let mut pet = Pet::new("Kylo".to_string(), "dog".to_string());
-        let old_timestamp = Utc::now() - Duration::hours(16);
+        let old_timestamp = Utc::now() - Duration::hours(5);
         pet.last_updated = old_timestamp;
 
         // When: apply_decay is called
