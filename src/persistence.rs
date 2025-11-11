@@ -65,7 +65,7 @@ pub fn save_pet(pet: &Pet) -> io::Result<()> {
 
 /// Loads a pet from the JSON file
 /// Returns a default pet if the file doesn't exist or contains invalid JSON
-/// Applies decay based on elapsed time since last_updated
+/// Applies decay based on elapsed time since last_updated and persists the updated timestamp
 pub fn load_pet() -> io::Result<Pet> {
     let pet_path = get_pet_file_path()?;
 
@@ -78,8 +78,18 @@ pub fn load_pet() -> io::Result<Pet> {
     match fs::read_to_string(&pet_path) {
         Ok(contents) => match serde_json::from_str::<Pet>(&contents) {
             Ok(mut pet) => {
+                // Store original last_updated to check if decay was applied
+                let original_last_updated = pet.last_updated;
+
                 // Apply decay based on elapsed time
                 apply_decay(&mut pet);
+
+                // If decay was applied (timestamp changed), save the updated pet
+                // This ensures the decay is persisted and won't be re-applied on next load
+                if pet.last_updated != original_last_updated {
+                    save_pet(&pet)?;
+                }
+
                 Ok(pet)
             }
             Err(_) => {

@@ -1,5 +1,5 @@
 use chrono::{Duration, Utc};
-use termipet::{load_pet, save_pet, Pet};
+use termipet::Pet;
 use std::fs;
 use std::path::PathBuf;
 
@@ -128,13 +128,13 @@ fn test_repeated_status_checks_without_save() {
 
     // First status check
     let json1 = fs::read_to_string(&pet_path).unwrap();
-    let mut pet1: Pet = serde_json::from_str(&json1).unwrap();
+    let pet1: Pet = serde_json::from_str(&json1).unwrap();
     let hours1 = Utc::now().signed_duration_since(pet1.last_updated).num_hours();
     println!("\nFirst status check - elapsed hours: {}", hours1);
 
     // Second status check (without saving in between)
     let json2 = fs::read_to_string(&pet_path).unwrap();
-    let mut pet2: Pet = serde_json::from_str(&json2).unwrap();
+    let pet2: Pet = serde_json::from_str(&json2).unwrap();
     let hours2 = Utc::now().signed_duration_since(pet2.last_updated).num_hours();
     println!("Second status check - elapsed hours: {}", hours2);
 
