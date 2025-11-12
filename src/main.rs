@@ -7,6 +7,7 @@ use termipet::{
 #[derive(Parser)]
 #[command(name = "termipet")]
 #[command(about = "A virtual pet that lives in your terminal", long_about = None)]
+#[command(version)]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
