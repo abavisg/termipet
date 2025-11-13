@@ -2,7 +2,7 @@ use crate::persistence::{load_pet, save_pet};
 use crate::utils::{cap_stat, random_bool};
 use colored::*;
 
-/// Walks the pet, restoring energy and managing potty needs
+/// Walks the pet, managing potty needs but decreasing energy
 pub fn walk_pet() -> Result<(), Box<dyn std::error::Error>> {
     // Load the pet
     let pet_result = load_pet();
@@ -34,8 +34,8 @@ pub fn walk_pet() -> Result<(), Box<dyn std::error::Error>> {
                 pet.happiness = cap_stat(pet.happiness as i32 - 15, 0, 100);
             }
 
-            // Apply energy increase (always happens)
-            pet.energy = cap_stat(pet.energy as i32 + 15, 0, 100);
+            // Apply energy decrease (walking is tiring)
+            pet.energy = cap_stat(pet.energy as i32 - 10, 0, 100);
 
             // Apply potty reduction with 80% probability
             if random_bool(0.8) {
@@ -57,8 +57,8 @@ pub fn walk_pet() -> Result<(), Box<dyn std::error::Error>> {
                 // Build stat changes string
                 let mut changes = vec![format!(
                     "{} {}",
-                    "Energy".green(),
-                    format!("+{}", energy_change).green()
+                    "Energy".red(),
+                    format!("{}", energy_change).red()
                 )];
 
                 if potty_relieved {
@@ -94,17 +94,17 @@ pub fn walk_pet() -> Result<(), Box<dyn std::error::Error>> {
                 println!(
                     "🚶 {} feels relieved after the walk! [{} {}, {} {}]",
                     pet.name,
-                    "Energy".green(),
-                    format!("+{}", energy_change).green(),
+                    "Energy".red(),
+                    format!("{}", energy_change).red(),
                     "Potty".green(),
                     format!("{}", potty_change).green()
                 );
             } else {
                 println!(
-                    "🚶 {} enjoyed the walk and looks refreshed! [{} {}]",
+                    "🚶 {} enjoyed the walk but feels a bit tired! [{} {}]",
                     pet.name,
-                    "Energy".green(),
-                    format!("+{}", energy_change).green()
+                    "Energy".red(),
+                    format!("{}", energy_change).red()
                 );
             }
 
@@ -143,28 +143,28 @@ mod tests {
         pet.potty_level = 30; // Low potty, no accident
         create_test_pet_file(&temp_dir, &pet);
 
-        // When: applying walk logic (energy +15)
+        // When: applying walk logic (energy -10)
         let old_energy = pet.energy;
-        pet.energy = cap_stat(pet.energy as i32 + 15, 0, 100);
+        pet.energy = cap_stat(pet.energy as i32 - 10, 0, 100);
 
-        // Then: energy should increase by 15
-        assert_eq!(pet.energy, old_energy + 15);
-        assert_eq!(pet.energy, 75);
+        // Then: energy should decrease by 10
+        assert_eq!(pet.energy, old_energy - 10);
+        assert_eq!(pet.energy, 50);
     }
 
     #[test]
     fn test_walk_caps_energy_at_100() {
-        // Given: a pet with energy=95
+        // Given: a pet with energy=5
         let temp_dir = TempDir::new().unwrap();
         let mut pet = Pet::new("Kylo".to_string(), "dog".to_string());
-        pet.energy = 95;
+        pet.energy = 5;
         create_test_pet_file(&temp_dir, &pet);
 
-        // When: applying walk (+15 would exceed 100)
-        pet.energy = cap_stat(pet.energy as i32 + 15, 0, 100);
+        // When: applying walk (-10 would go below 0)
+        pet.energy = cap_stat(pet.energy as i32 - 10, 0, 100);
 
-        // Then: energy should be capped at 100
-        assert_eq!(pet.energy, 100);
+        // Then: energy should be capped at 0
+        assert_eq!(pet.energy, 0);
     }
 
     #[test]
