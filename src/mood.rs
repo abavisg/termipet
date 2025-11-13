@@ -14,7 +14,7 @@ pub enum Mood {
 /// Priority order (first match wins):
 /// 1. Grumpy: energy < 20 and happiness < 40
 /// 2. Sleepy: energy < 30
-/// 3. Hungry: hunger < 40
+/// 3. Hungry: hunger < 50
 /// 4. Embarrassed: potty_level > 80
 /// 5. Bored: happiness < 50 and energy > 50
 /// 6. Happy: hunger ≥ 70 and happiness ≥ 80
@@ -30,8 +30,8 @@ pub fn calculate_mood(pet: &Pet) -> Mood {
         return Mood::Sleepy;
     }
 
-    // Hungry
-    if pet.hunger < 40 {
+    // Hungry (triggers earlier now at < 50 instead of < 40)
+    if pet.hunger < 50 {
         return Mood::Hungry;
     }
 
